@@ -7,12 +7,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 
 
-RUN apt-get update && apt-get install -y \
-    chromium-driver \
-    chromium \
-    --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
-
+RUN sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list \
+    && sed -i '/security.debian.org/d' /etc/apt/sources.list \
+    && apt-get update \
+    && apt-get install -y chromium-driver chromium --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
+    
 ENV PATH="/usr/lib/chromium-browser/:${PATH}"
 
 CMD ["python", "app.py"]
